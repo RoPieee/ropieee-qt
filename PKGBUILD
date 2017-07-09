@@ -13,7 +13,7 @@ _qtver=5.9.1
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
 pkgver=${_qtver/-/}
-pkgrel=2
+pkgrel=3
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
