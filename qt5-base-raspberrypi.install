@@ -1,0 +1,16 @@
+post_install()
+{
+   # create fonts link
+   ln -sf /usr/share/fonts/TTF /usr/lib/fonts
+}
+
+pre_upgrade()
+{
+   echo "pre_upgrade"
+}
+
+post_upgrade()
+{
+   # create fonts link
+   ln -sf /usr/share/fonts/TTF /usr/lib/fonts
+}

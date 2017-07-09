@@ -1,0 +1,143 @@
+# $Id: PKGBUILD 240297 2015-06-03 10:22:03Z fyan $
+# Maintainer: Felix Yan <felixonmars@archlinux.org>
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+
+# ALARM: Kevin Mihelich <kevin@archlinuxarm.org>
+#  - -no-reduce-relocations -- not available on ARM
+#  - explicitly disable x86 optimizations
+#  - use OpenGLES 2.0
+
+pkgbase=qt5-base
+pkgname=(qt5-base-raspberrypi qt5-xcb-private-headers-raspberrypi)
+_qtver=5.9.1
+provides=("qt5-base=${pkgver}")
+conflicts=('qt5-base')
+pkgver=${_qtver/-/}
+pkgrel=2
+arch=('armv7h')
+url='http://qt-project.org/'
+license=('GPL3' 'LGPL3' 'FDL' 'custom')
+pkgdesc='A cross-platform application and UI framework'
+depends=('libjpeg-turbo' 'xcb-util-keysyms' 'xcb-util-renderutil' 'libgl' 'fontconfig'
+         'xcb-util-wm' 'libxrender' 'libxi' 'sqlite' 'xcb-util-image' 'icu' 'pcre2'
+         'tslib' 'libinput' 'libsm' 'libxkbcommon-x11' 'libproxy' 'libcups' 'openssl-1.0' 'double-conversion')
+makedepends=('libfbclient' 'libmariadbclient' 'sqlite' 'unixodbc' 'postgresql-libs' 'alsa-lib' 'gst-plugins-base-libs'
+             'gtk3' 'libpulse' 'cups' 'freetds' 'fakeroot')
+optdepends=('qt5-svg: to use SVG icon themes'
+            'postgresql-libs: PostgreSQL driver'
+            'libmariadbclient: MariaDB driver'
+            'unixodbc: ODBC driver'
+            'libfbclient: Firebird/iBase driver'
+            'freetds: MS SQL driver'
+            'gtk3: GTK platform plugin')
+conflicts=('qtchooser')
+groups=('qt' 'qt5')
+_pkgfqn="${pkgbase/5-/}-opensource-src-${_qtver}"
+source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz"
+        qtbug-61731.patch::"https://github.com/qt/qtbase/commit/386af91c.patch"
+        qtcreatorbug-18448.patch::"https://github.com/qt/qtbase/commit/2a9f678f.patch")
+sha256sums=('bc9a21e9f6fff9629019fdf9f989f064751d5073c3a28dc596def92f4d4275c6'
+            'b164a873894cfc783980e883082d2b22b5aab00166c6751f66e78d4c41c3e2e3'
+            '5f878d144ac18097376dce154a411449cde181ddce2d93501114f890c9cdb1c3')
+
+prepare() {
+  cd ${_pkgfqn}
+
+  # Build qmake using Arch {C,LD}FLAGS
+  # This also sets default {C,CXX,LD}FLAGS for projects built using qmake
+  sed -i -e "s|^\(QMAKE_CFLAGS_RELEASE.*\)|\1 ${CFLAGS}|" \
+    mkspecs/common/gcc-base.conf
+  sed -i -e "s|^\(QMAKE_LFLAGS_RELEASE.*\)|\1 ${LDFLAGS}|" \
+    mkspecs/common/g++-unix.conf
+
+  # Use python2 for Python 2.x
+  find . -name '*.py' -exec sed -i \
+    's|#![ ]*/usr/bin/python$|&2|;s|#![ ]*/usr/bin/env python$|&2|' {} +
+
+  # Fix missing private includes https://bugreports.qt.io/browse/QTBUG-37417
+  sed -e '/CMAKE_NO_PRIVATE_INCLUDES\ \=\ true/d' -i mkspecs/features/create_cmake.prf
+
+  # Fix accessibility build
+  patch -p1 -i ../qtbug-61731.patch
+  # Fix doc navigation
+  patch -p1 -i ../qtcreatorbug-18448.patch
+}
+
+build() {
+  cd ${_pkgfqn}
+
+  echo "INCLUDEPATH += /usr/include/openssl-1.0" >> src/network/network.pro
+  export OPENSSL_LIBS='-L/usr/lib/openssl-1.0 -lssl -lcrypto'
+
+  PYTHON=/usr/bin/python2 ./configure -confirm-license -opensource -v \
+    -prefix /usr \
+    -docdir /usr/share/doc/qt \
+    -headerdir /usr/include/qt \
+    -archdatadir /usr/lib/qt \
+    -datadir /usr/share/qt \
+    -sysconfdir /etc/xdg \
+    -examplesdir /usr/share/doc/qt/examples \
+    -plugin-sql-{psql,mysql,sqlite,odbc,ibase} \
+    -system-sqlite \
+    -openssl-linked \
+    -nomake examples \
+    -no-rpath \
+    -optimized-qmake \
+    -system-harfbuzz \
+    -no-use-gold-linker \
+    -no-reduce-relocations \
+    -no-sse2 \
+    -no-sse3 \
+    -no-ssse3 \
+    -no-sse4.1 \
+    -no-sse4.2 \
+    -no-avx \
+    -no-avx2 \
+    -opengl es2 \
+    -device linux-rasp-pi2-g++ \
+    -device-option CROSS_COMPILE=/usr/bin/
+  #  -dbus-linked \
+  #  -journald \
+
+  make
+}
+
+package_qt5-base-raspberrypi() {
+  pkgdesc='A cross-platform application and UI framework'
+  provides=("qt5-base=${pkgver}")
+  conflicts=('qt5-base')
+  install=${pkgname}.install
+
+  cd ${_pkgfqn}
+  make INSTALL_ROOT="${pkgdir}" install
+
+  install -D -m644 LGPL_EXCEPTION.txt \
+    "${pkgdir}"/usr/share/licenses/${pkgbase}/LGPL_EXCEPTION.txt
+
+  # Drop QMAKE_PRL_BUILD_DIR because reference the build dir
+  find "${pkgdir}/usr/lib" -type f -name '*.prl' \
+    -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
+
+  # Fix wrong qmake path in pri file
+  sed -i "s|${srcdir}/${_pkgfqn}|/usr|" \
+    "${pkgdir}"/usr/lib/qt/mkspecs/modules/qt_lib_bootstrap_private.pri
+
+  # Symlinks for backwards compatibility
+  for b in "${pkgdir}"/usr/bin/*; do
+    ln -s /usr/bin/$(basename $b) "${pkgdir}"/usr/bin/$(basename $b)-qt5
+  done
+}
+
+package_qt5-xcb-private-headers-raspberrypi() {
+  pkgdesc='Private headers for Qt5 Xcb'
+  depends=("qt5-base-raspberrypi=$pkgver")
+  provides=("qt5-xcb-private-headers=${pkgver}")
+  conflicts=('qt5-xcb-private-headers')
+  optdepends=()
+  groups=()
+  conflicts=()
+
+  cd ${_pkgfqn}
+  install -d -m755 "$pkgdir"/usr/include/qtxcb-private
+  cp -r src/plugins/platforms/xcb/*.h "$pkgdir"/usr/include/qtxcb-private/
+}
