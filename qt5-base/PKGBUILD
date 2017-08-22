@@ -8,7 +8,7 @@
 #  - use OpenGLES 2.0
 
 pkgbase=qt5-base
-pkgname=(qt5-base-raspberrypi qt5-xcb-private-headers-raspberrypi)
+pkgname=(qt5-base-ropieee qt5-xcb-private-headers-ropieee)
 _qtver=5.9.1
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
