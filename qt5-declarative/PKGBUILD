@@ -6,9 +6,8 @@ pkgbase=qt5-declarative
 pkgname=qt5-declarative-ropieee
 _qtver=5.9.1
 provides=("qt5-declarative=${pkgver}")
-conflicts=('qt5-declarative')
 pkgver=${_qtver/-/}
-pkgrel=51
+pkgrel=52
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
@@ -16,7 +15,7 @@ pkgdesc='Classes for QML and JavaScript languages'
 depends=('qt5-xmlpatterns')
 makedepends=('python2' 'cmake')
 groups=('qt' 'qt5')
-conflicts=('qtchooser' 'qt5-declarative-render2d')
+conflicts=('qtchooser' 'qt5-declarative-render2d' 'qt5-declarative')
 replaces=('qt5-declarative-render2d')
 _pkgfqn="${pkgbase/5-/}-opensource-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
@@ -33,8 +32,8 @@ prepare() {
 
   # skip tools and examples
   cd ${_pkgfqn}
-  mv tools tools.bak2
-  mv examples examples.bak2
+  mv tools tools.bak4
+  mv examples examples.bak4
 }
 
 build() {
