@@ -13,7 +13,7 @@ _qtver=5.9.1
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
 pkgver=${_qtver/-/}
-pkgrel=3
+pkgrel=50
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
@@ -102,7 +102,7 @@ build() {
   make
 }
 
-package_qt5-base-raspberrypi() {
+package_qt5-base-ropieee() {
   pkgdesc='A cross-platform application and UI framework'
   provides=("qt5-base=${pkgver}")
   conflicts=('qt5-base')
@@ -128,7 +128,7 @@ package_qt5-base-raspberrypi() {
   done
 }
 
-package_qt5-xcb-private-headers-raspberrypi() {
+package_qt5-xcb-private-headers-ropieee() {
   pkgdesc='Private headers for Qt5 Xcb'
   depends=("qt5-base-raspberrypi=$pkgver")
   provides=("qt5-xcb-private-headers=${pkgver}")
