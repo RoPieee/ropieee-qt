@@ -7,7 +7,7 @@ pkgname=qt5-declarative-ropieee
 _qtver=5.9.1
 provides=("qt5-declarative=${pkgver}")
 pkgver=${_qtver/-/}
-pkgrel=52
+pkgrel=55
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
