@@ -2,23 +2,23 @@
 # Maintainer: Felix Yan <felixonmars@archlinux.org>
 # Contributor: Andrea Scarpino <andrea@archlinux.org>
 
-pkgbase=qt5-xmlpatterns
-pkgname=qt5-xmlpatterns-ropieee
+pkgbase=qt5-graphicaleffects
+pkgname=qt5-graphicaleffects-ropieee
 _qtver=5.9.5
-provides=("qt5-xmlpatterns=${pkgver}")
+provides=("qt5-graphicaleffects=${pkgver}")
 pkgver=${_qtver/-/}
 pkgrel=1
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
-pkgdesc='Support for XPath, XQuery, XSLT and XML schema validation'
-depends=('qt5-base')
+pkgdesc='Graphical effects for use with Qt Quick 2'
+depends=('qt5-declarative')
 makedepends=()
-conflicts=('qtchooser' 'qt5-xmlpatterns')
 groups=('qt' 'qt5')
+conflicts=('qt5-graphicaleffects')
 _pkgfqn="${pkgbase/5-/}-opensource-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('1dd2df5eecf2986a7f9dddd271fa4a9a05ecd2e6cfe7051eef02a65b54161233')
+sha256sums=('0b8d400858dd7a38b84a9ec3600c7d9c60193394188fbbed95cb05897b072635')
 
 prepare() {
   mkdir -p build
@@ -34,10 +34,6 @@ build() {
 package() {
   cd build
   make INSTALL_ROOT="$pkgdir" install
-
-  # Drop QMAKE_PRL_BUILD_DIR because reference the build dir
-  find "$pkgdir/usr/lib" -type f -name '*.prl' \
-    -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
 
   install -d "$pkgdir"/usr/share/licenses
   ln -s /usr/share/licenses/qt5-base "$pkgdir"/usr/share/licenses/${pkgname}

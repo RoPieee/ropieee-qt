@@ -9,11 +9,11 @@
 
 pkgbase=qt5-base
 pkgname=(qt5-base-ropieee qt5-xcb-private-headers-ropieee)
-_qtver=5.9.1
+_qtver=5.9.5
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
 pkgver=${_qtver/-/}
-pkgrel=55
+pkgrel=1
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
@@ -36,7 +36,7 @@ _pkgfqn="${pkgbase/5-/}-opensource-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz"
         qtbug-61731.patch::"https://github.com/qt/qtbase/commit/386af91c.patch"
         qtcreatorbug-18448.patch::"https://github.com/qt/qtbase/commit/2a9f678f.patch")
-sha256sums=('bc9a21e9f6fff9629019fdf9f989f064751d5073c3a28dc596def92f4d4275c6'
+sha256sums=('7d3ef666d2efcf260a5a0780a1ccd49f897e839e1d9932225be4859ec26730d4'
             'b164a873894cfc783980e883082d2b22b5aab00166c6751f66e78d4c41c3e2e3'
             '5f878d144ac18097376dce154a411449cde181ddce2d93501114f890c9cdb1c3')
 
@@ -58,9 +58,9 @@ prepare() {
   sed -e '/CMAKE_NO_PRIVATE_INCLUDES\ \=\ true/d' -i mkspecs/features/create_cmake.prf
 
   # Fix accessibility build
-  patch -p1 -i ../qtbug-61731.patch
+  #patch -p1 -i ../qtbug-61731.patch
   # Fix doc navigation
-  patch -p1 -i ../qtcreatorbug-18448.patch
+  #patch -p1 -i ../qtcreatorbug-18448.patch
 }
 
 build() {

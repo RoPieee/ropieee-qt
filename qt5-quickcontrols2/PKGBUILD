@@ -2,23 +2,23 @@
 # Maintainer: Felix Yan <felixonmars@archlinux.org>
 # Contributor: Andrea Scarpino <andrea@archlinux.org>
 
-pkgbase=qt5-xmlpatterns
-pkgname=qt5-xmlpatterns-ropieee
+pkgbase=qt5-quickcontrols2
+pkgname=qt5-quickcontrols2-ropieee
 _qtver=5.9.5
-provides=("qt5-xmlpatterns=${pkgver}")
+provides=("qt5-quickcontrols2=${pkgver}")
 pkgver=${_qtver/-/}
 pkgrel=1
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
-pkgdesc='Support for XPath, XQuery, XSLT and XML schema validation'
-depends=('qt5-base')
-makedepends=()
-conflicts=('qtchooser' 'qt5-xmlpatterns')
+pkgdesc='Next generation user interface controls based on Qt Quick'
+depends=('qt5-declarative')
+optdepends=('qt5-graphicaleffects: for the Material style')
 groups=('qt' 'qt5')
+conflicts=('qt5-quickcontrols2')
 _pkgfqn="${pkgbase/5-/}-opensource-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('1dd2df5eecf2986a7f9dddd271fa4a9a05ecd2e6cfe7051eef02a65b54161233')
+sha256sums=('a580763d4dc0c718c14b76d748473e2e1f5c1769a1d9a3752c5eb2d8ca5c57ce')
 
 prepare() {
   mkdir -p build
