@@ -1,0 +1,43 @@
+# $Id: PKGBUILD 240297 2015-06-03 10:22:03Z fyan $
+# Maintainer: Felix Yan <felixonmars@archlinux.org>
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+
+pkgbase=qt5-xmlpatterns
+pkgname=qt5-xmlpatterns-ropieee
+_qtver=5.9.5
+pkgver=${_qtver/-/}
+pkgrel=1
+arch=('armv7h')
+url='http://qt-project.org/'
+license=('GPL3' 'LGPL3' 'FDL' 'custom')
+pkgdesc='Support for XPath, XQuery, XSLT and XML schema validation'
+depends=('qt5-base')
+makedepends=()
+conflicts=('qtchooser')
+groups=('qt' 'qt5')
+_pkgfqn="${pkgbase/5-/}-opensource-src-${_qtver}"
+source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
+sha256sums=('1dd2df5eecf2986a7f9dddd271fa4a9a05ecd2e6cfe7051eef02a65b54161233')
+
+prepare() {
+  mkdir -p build
+}
+
+build() {
+  cd build
+
+  qmake ../${_pkgfqn}
+  make
+}
+
+package() {
+  cd build
+  make INSTALL_ROOT="$pkgdir" install
+
+  # Drop QMAKE_PRL_BUILD_DIR because reference the build dir
+  find "$pkgdir/usr/lib" -type f -name '*.prl' \
+    -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
+
+  install -d "$pkgdir"/usr/share/licenses
+  ln -s /usr/share/licenses/qt5-base "$pkgdir"/usr/share/licenses/${pkgname}
+}
