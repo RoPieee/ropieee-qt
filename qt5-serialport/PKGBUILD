@@ -1,25 +1,24 @@
 # $Id: PKGBUILD 240297 2015-06-03 10:22:03Z fyan $
-# Maintainer: Felix Yan <felixonmars@archlinux.org>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
+# Maintainer: Felix Yan 
+# Contributor: Andrea Scarpino 
 
-pkgbase=qt5-xmlpatterns
-pkgname=qt5-xmlpatterns-ropieee
+pkgbase=qt5-serialport
+pkgname=qt5-serialport-ropieee
 _qtver=5.11.1
 pkgver=${_qtver/-/}
-provides=("qt5-xmlpatterns=${pkgver}")
-conflicts=('qt5-xmlpatterns')
+provides=("qt5-serialport=${pkgver}")
+conflicts=('qt5-serialport')
 pkgrel=1
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
-pkgdesc='Support for XPath, XQuery, XSLT and XML schema validation'
+pkgdesc='Provides access to hardware and virtual serial ports'
 depends=('qt5-base')
 makedepends=()
-conflicts=('qtchooser' 'qt5-xmlpatterns')
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('6117e120c87b32dd07877dd0a6bf862b6285cb0d8b547190882980682f53af58')
+sha256sums=('56a7993821d556d84494c6dfc22759eb6f2a979e21685403a2b9da75f0ba64a3')
 
 prepare() {
   mkdir -p build
@@ -36,10 +35,11 @@ package() {
   cd build
   make INSTALL_ROOT="$pkgdir" install
 
-#  # Drop QMAKE_PRL_BUILD_DIR because reference the build dir
-#  find "$pkgdir/usr/lib" -type f -name '*.prl' \
-#    -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
+  # Drop QMAKE_PRL_BUILD_DIR because reference the build dir
+  find "$pkgdir/usr/lib" -type f -name '*.prl' \
+    -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
 
   install -d "$pkgdir"/usr/share/licenses
   ln -s /usr/share/licenses/qt5-base "$pkgdir"/usr/share/licenses/${pkgname}
 }
+

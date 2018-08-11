@@ -4,9 +4,10 @@
 
 pkgbase=qt5-declarative
 pkgname=qt5-declarative-ropieee
-_qtver=5.9.5
-provides=("qt5-declarative=${pkgver}")
+_qtver=5.11.1
 pkgver=${_qtver/-/}
+provides=("qt5-declarative=${pkgver}")
+conflicts=('qt5-declarative')
 pkgrel=1
 arch=('armv7h')
 url='http://qt-project.org/'
@@ -17,9 +18,9 @@ makedepends=('python2' 'cmake')
 groups=('qt' 'qt5')
 conflicts=('qtchooser' 'qt5-declarative-render2d' 'qt5-declarative')
 replaces=('qt5-declarative-render2d')
-_pkgfqn="${pkgbase/5-/}-opensource-src-${_qtver}"
+_pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('b41868087b8315f7b56dd01441b9efdbad6f2db6a74227be86200dd44286798b')
+sha256sums=('9ecf5ef6bf618fcb6719a4b22e3d9f9ce7623c2344667038171d5662624c4f3a')
 
 prepare() {
   mkdir -p build

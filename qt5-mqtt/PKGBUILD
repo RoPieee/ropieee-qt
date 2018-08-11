@@ -1,0 +1,47 @@
+# $Id: PKGBUILD 240297 2015-06-03 10:22:03Z fyan $
+# Maintainer: Felix Yan 
+# Contributor: Andrea Scarpino 
+
+pkgbase=qt5-mqtt
+pkgname=qt5-mqtt-ropieee
+_qtver=5.11.1
+pkgver=${_qtver/-/}
+provides=("qt5-mqtt=${pkgver}")
+conflicts=('qt5-mqtt')
+pkgrel=1
+arch=('armv7h')
+url='http://qt-project.org/'
+license=('GPL3' 'LGPL3' 'FDL' 'custom')
+pkgdesc='Provides access to hardware and virtual serial ports'
+depends=('qt5-base')
+makedepends=()
+groups=('qt' 'qt5')
+_pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
+source=('emqtt_checkout::git+https://github.com/emqtt/qmqtt#branch=master')
+#source=('mender_checkout::git+https://github.com/mendersoftware/mender#branch=1.5.x')
+md5sums=('SKIP')
+
+#prepare() {
+#  mkdir -p build
+#}
+
+build() {
+  cd emqtt_checkout
+
+  #qmake ../${_pkgfqn}
+  qmake-qt5
+  make
+}
+
+package() {
+  cd emqtt_checkout
+  make INSTALL_ROOT="$pkgdir" install
+
+  # Drop QMAKE_PRL_BUILD_DIR because reference the build dir
+  find "$pkgdir/usr/lib" -type f -name '*.prl' \
+    -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
+
+  install -d "$pkgdir"/usr/share/licenses
+  ln -s /usr/share/licenses/qt5-base "$pkgdir"/usr/share/licenses/${pkgname}
+}
+

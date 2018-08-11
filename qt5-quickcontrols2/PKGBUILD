@@ -4,9 +4,10 @@
 
 pkgbase=qt5-quickcontrols2
 pkgname=qt5-quickcontrols2-ropieee
-_qtver=5.9.5
-provides=("qt5-quickcontrols2=${pkgver}")
+_qtver=5.11.1
 pkgver=${_qtver/-/}
+provides=("qt5-quickcontrols2=${pkgver}")
+conflicts=('qt5-quickcontrols2')
 pkgrel=1
 arch=('armv7h')
 url='http://qt-project.org/'
@@ -15,10 +16,9 @@ pkgdesc='Next generation user interface controls based on Qt Quick'
 depends=('qt5-declarative')
 optdepends=('qt5-graphicaleffects: for the Material style')
 groups=('qt' 'qt5')
-conflicts=('qt5-quickcontrols2')
-_pkgfqn="${pkgbase/5-/}-opensource-src-${_qtver}"
+_pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('a580763d4dc0c718c14b76d748473e2e1f5c1769a1d9a3752c5eb2d8ca5c57ce')
+sha256sums=('bdb066fa0d51ad36a2c756d4cba63892587638e5df9b9b6ee63b963ff39ec442')
 
 prepare() {
   mkdir -p build
