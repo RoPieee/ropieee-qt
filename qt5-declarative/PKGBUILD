@@ -4,11 +4,11 @@
 
 pkgbase=qt5-declarative
 pkgname=qt5-declarative-ropieee
-_qtver=5.11.1
+_qtver=5.11.2
 pkgver=${_qtver/-/}
 provides=("qt5-declarative=${pkgver}")
 conflicts=('qt5-declarative')
-pkgrel=3
+pkgrel=1
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
@@ -20,7 +20,7 @@ conflicts=('qtchooser' 'qt5-declarative-render2d' 'qt5-declarative')
 replaces=('qt5-declarative-render2d')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('9ecf5ef6bf618fcb6719a4b22e3d9f9ce7623c2344667038171d5662624c4f3a')
+sha256sums=('220d86f8031e9d45f3c369c3fd517aaa4c5783ad62c843a21fa7cc3c0a36f2cd')
 
 prepare() {
   mkdir -p build
