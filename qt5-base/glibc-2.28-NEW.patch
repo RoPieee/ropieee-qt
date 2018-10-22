@@ -1,0 +1,35 @@
+diff -Naur qtbase-everywhere-src-5.11.2.org/mkspecs/linux-g++/qplatformdefs.h qtbase-everywhere-src-5.11.2.new/mkspecs/linux-g++/qplatformdefs.h
+--- qtbase-everywhere-src-5.11.2.org/mkspecs/linux-g++/qplatformdefs.h	2018-09-13 06:25:10.000000000 +0200
++++ qtbase-everywhere-src-5.11.2.new/mkspecs/linux-g++/qplatformdefs.h	2018-10-20 16:06:41.460766335 +0200
+@@ -72,7 +72,9 @@
+ #include <sys/time.h>
+ #include <sys/shm.h>
+ #include <sys/socket.h>
++#if 0
+ #include <sys/stat.h>
++#endif
+ #include <sys/wait.h>
+ #include <netinet/in.h>
+ 
+diff -Naur qtbase-everywhere-src-5.11.2.org/src/corelib/io/qfilesystemengine_unix.cpp qtbase-everywhere-src-5.11.2.new/src/corelib/io/qfilesystemengine_unix.cpp
+--- qtbase-everywhere-src-5.11.2.org/src/corelib/io/qfilesystemengine_unix.cpp	2018-09-13 06:25:10.000000000 +0200
++++ qtbase-everywhere-src-5.11.2.new/src/corelib/io/qfilesystemengine_unix.cpp	2018-10-20 17:55:03.493945854 +0200
+@@ -50,7 +50,9 @@
+ #include <pwd.h>
+ #include <stdlib.h> // for realpath()
+ #include <sys/types.h>
++#if 0
+ #include <sys/stat.h>
++#endif
+ #include <unistd.h>
+ #include <stdio.h>
+ #include <errno.h>
+@@ -97,7 +99,7 @@
+ #  define FICLONE       _IOW(0x94, 9, int)
+ #endif
+ 
+-#  if defined(Q_OS_ANDROID)
++#  if 1
+ // renameat2() and statx() are disabled on Android because quite a few systems
+ // come with sandboxes that kill applications that make system calls outside a
+ // whitelist and several Android vendors can't be bothered to update the list.

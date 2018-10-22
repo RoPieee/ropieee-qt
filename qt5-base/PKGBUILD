@@ -9,7 +9,7 @@
 
 pkgbase=qt5-base
 pkgname=(qt5-base-ropieee qt5-xcb-private-headers-ropieee)
-_qtver=5.11.1
+_qtver=5.11.2
 pkgver=${_qtver/-/}
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
@@ -34,15 +34,15 @@ conflicts=('qtchooser')
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz"
-        'glibc-2.28.patch')
-sha256sums=('a0d047b2da5782c8332c59ae203984b64e4d5dc5f4ba9c0884fdbe753d0afb46'
-            '46fe59014d32862334b3f8bb81e02e84edc57bd5c465cde98cd9a05ccc343b9a')
+	"glibc-2.28-NEW.patch")
+sha256sums=('6381e7c3468d5a1dcfe3683b29eeced192faa0f8a32434fec071a59b8bcd0107'
+            '77868eb1124a6f524873493573c091eb11366ab0b4f5568a47d30b1ac92b2396')
 
 prepare() {
   cd ${_pkgfqn}
 
- # Work around build failure with glibc 2.28 (patch from Fedora)
-  patch -Np1 -i ../glibc-2.28.patch
+  # Work around build failure with glibc 2.28
+  patch -p1 -i ../glibc-2.28-NEW.patch
 
   # Build qmake using Arch {C,LD}FLAGS
   # This also sets default {C,CXX,LD}FLAGS for projects built using qmake
@@ -50,27 +50,17 @@ prepare() {
     mkspecs/common/gcc-base.conf
   sed -i -e "s|^\(QMAKE_LFLAGS_RELEASE.*\)|\1 ${LDFLAGS}|" \
     mkspecs/common/g++-unix.conf
-
-  # Use python2 for Python 2.x
-  find . -name '*.py' -exec sed -i \
-    's|#![ ]*/usr/bin/python$|&2|;s|#![ ]*/usr/bin/env python$|&2|' {} +
-
-  # Fix missing private includes https://bugreports.qt.io/browse/QTBUG-37417
-  #sed -e '/CMAKE_NO_PRIVATE_INCLUDES\ \=\ true/d' -i mkspecs/features/create_cmake.prf
-
-  # Fix accessibility build
-  #patch -p1 -i ../qtbug-61731.patch
-  # Fix doc navigation
-  #patch -p1 -i ../qtcreatorbug-18448.patch
 }
 
 build() {
   cd ${_pkgfqn}
 
-#  echo "INCLUDEPATH += /usr/include/openssl-1.0" >> src/network/network.pro
-#  export OPENSSL_LIBS='-L/usr/lib/openssl-1.0 -lssl -lcrypto'
+  export PKG_CONFIG_SYSROOT_DIR=/
+  export PKG_CONFIG_LIBDIR=/usr/lib/pkgconfig:/usr/share/pkgconfig:/opt/vc/lib/pkgconfig
 
-  PYTHON=/usr/bin/python2 ./configure -confirm-license -opensource -v \
+  ./configure -confirm-license -opensource -v \
+    -force-pkg-config \
+    -sysroot / \
     -prefix /usr \
     -docdir /usr/share/doc/qt \
     -headerdir /usr/include/qt \
@@ -81,8 +71,15 @@ build() {
     -openssl-linked \
     -nomake examples \
     -no-rpath \
+    -no-pch \
+    -no-glib \
+    -no-gtk \
+    -no-feature-statx \
+    -no-feature-renameat2 \
     -optimized-qmake \
     -system-harfbuzz \
+    -system-freetype \
+    -fontconfig \
     -no-use-gold-linker \
     -no-reduce-relocations \
     -no-sse2 \
@@ -92,7 +89,12 @@ build() {
     -no-sse4.2 \
     -no-avx \
     -no-avx2 \
+    -no-feature-renameat2 \
+    -no-feature-getentropy \
     -opengl es2 \
+    -eglfs \
+    -no-gtk \
+    -no-gbm \
     -device linux-rasp-pi2-g++ \
     -device-option CROSS_COMPILE=/usr/bin/
   #  -dbus-linked \

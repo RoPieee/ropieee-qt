@@ -1,0 +1,16 @@
+There's an issue with the OpenGL libs, so first you need to 'swap out' the system libraries for the Pi ones.
+
+
+See here:
+
+mv /usr/lib/arm-linux-gnueabihf/libEGL.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libEGL.so.1.0.0_backup
+mv /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2.0.0_backup
+ln -s /opt/vc/lib/libEGL.so /usr/lib/arm-linux-gnueabihf/libEGL.so.1.0.0
+ln -s /opt/vc/lib/libGLESv2.so /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2.0.0
+
+
+ln -s /opt/vc/lib/libEGL.so /opt/vc/lib/libEGL.so.1
+ln -s /opt/vc/lib/libGLESv2.so /opt/vc/lib/libGLESv2.so.2
+
+* Remark 1: the version numbers above can differ (1.1 instead of 1.0 etc.)
+* More details here: https://wiki.qt.io/RaspberryPi2EGLFS

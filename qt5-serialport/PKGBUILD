@@ -8,7 +8,7 @@ _qtver=5.11.1
 pkgver=${_qtver/-/}
 provides=("qt5-serialport=${pkgver}")
 conflicts=('qt5-serialport')
-pkgrel=1
+pkgrel=3
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
