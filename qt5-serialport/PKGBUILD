@@ -4,11 +4,11 @@
 
 pkgbase=qt5-serialport
 pkgname=qt5-serialport-ropieee
-_qtver=5.11.1
+_qtver=5.11.2
 pkgver=${_qtver/-/}
 provides=("qt5-serialport=${pkgver}")
 conflicts=('qt5-serialport')
-pkgrel=3
+pkgrel=1
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
@@ -18,7 +18,7 @@ makedepends=()
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('56a7993821d556d84494c6dfc22759eb6f2a979e21685403a2b9da75f0ba64a3')
+sha256sums=('b01b69ce421d449402363c0cf617fcc8856e39d6d2c28aa3d06d1f5359dc6f6e')
 
 prepare() {
   mkdir -p build
