@@ -4,11 +4,11 @@
 
 pkgbase=qt5-mqtt
 pkgname=qt5-mqtt-ropieee
-_qtver=5.11.1
+_qtver=5.11.2
 pkgver=${_qtver/-/}
 provides=("qt5-mqtt=${pkgver}")
 conflicts=('qt5-mqtt')
-pkgrel=3
+pkgrel=1
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
@@ -18,7 +18,6 @@ makedepends=()
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=('emqtt_checkout::git+https://github.com/emqtt/qmqtt#branch=master')
-#source=('mender_checkout::git+https://github.com/mendersoftware/mender#branch=1.5.x')
 md5sums=('SKIP')
 
 #prepare() {
