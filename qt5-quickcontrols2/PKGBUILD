@@ -4,7 +4,7 @@
 
 pkgbase=qt5-quickcontrols2
 pkgname=qt5-quickcontrols2-ropieee
-_qtver=5.11.2
+_qtver=5.12.3
 pkgver=${_qtver/-/}
 provides=("qt5-quickcontrols2=${pkgver}")
 conflicts=('qt5-quickcontrols2')
@@ -18,7 +18,7 @@ optdepends=('qt5-graphicaleffects: for the Material style')
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('aa0549f9a4135f9d600b57f53347ebf344e60d21f90c6d844109755da12dcb84')
+sha256sums=('e855e8369c3cb5a2ebcd2028a2a195ba73945fd9d5bc26134706c2fa14e99b3a')
 
 prepare() {
   mkdir -p build
