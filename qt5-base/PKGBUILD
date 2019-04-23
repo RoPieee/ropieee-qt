@@ -9,7 +9,7 @@
 
 pkgbase=qt5-base
 pkgname=(qt5-base-ropieee qt5-xcb-private-headers-ropieee)
-_qtver=5.11.2
+_qtver=5.12.3
 pkgver=${_qtver/-/}
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
@@ -18,7 +18,7 @@ arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
 pkgdesc='A cross-platform application and UI framework'
-depends=('libjpeg-turbo' 'xcb-util-keysyms' 'xcb-util-renderutil' 'libgl' 'fontconfig'
+depends=('libjpeg-turbo' 'xcb-util-keysyms' 'xcb-util-renderutil' 'libgl' 'fontconfig' 'xdg-utils'
          'xcb-util-wm' 'libxrender' 'libxi' 'sqlite' 'xcb-util-image' 'icu' 'pcre2'
          'tslib' 'libinput' 'libsm' 'libxkbcommon-x11' 'libproxy' 'libcups' 'openssl-1.0' 'double-conversion')
 makedepends=('libfbclient' 'libmariadbclient' 'sqlite' 'unixodbc' 'postgresql-libs' 'alsa-lib' 'gst-plugins-base-libs'
@@ -35,14 +35,14 @@ groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz"
 	"glibc-2.28-NEW.patch")
-sha256sums=('6381e7c3468d5a1dcfe3683b29eeced192faa0f8a32434fec071a59b8bcd0107'
+sha256sums=('fddfd8852ef7503febeed67b876d1425160869ae2b1ae8e10b3fb0fedc5fe701'
             '77868eb1124a6f524873493573c091eb11366ab0b4f5568a47d30b1ac92b2396')
 
 prepare() {
   cd ${_pkgfqn}
 
   # Work around build failure with glibc 2.28
-  patch -p1 -i ../glibc-2.28-NEW.patch
+  #patch -p1 -i ../glibc-2.28-NEW.patch
 
   # Build qmake using Arch {C,LD}FLAGS
   # This also sets default {C,CXX,LD}FLAGS for projects built using qmake
@@ -70,12 +70,23 @@ build() {
     -examplesdir /usr/share/doc/qt/examples \
     -openssl-linked \
     -nomake examples \
+    -nomake tests \
+    -nomake tools \
     -no-rpath \
     -no-pch \
     -no-glib \
+    -no-gbm \
     -no-gtk \
-    -no-feature-statx \
-    -no-feature-renameat2 \
+    -no-xcb \
+    -skip qt3d \
+    -skip qtactiveqt \
+    -skip qtandroidextras \
+    -skip qtcanvas3d \
+    -skip qtconnectivity \
+    -skip qtdatavis3d \
+    -skip qtdoc \
+    -skip qtgamepad \
+    -reduce-exports \
     -optimized-qmake \
     -system-harfbuzz \
     -system-freetype \
@@ -89,16 +100,15 @@ build() {
     -no-sse4.2 \
     -no-avx \
     -no-avx2 \
-    -no-feature-renameat2 \
     -no-feature-getentropy \
     -opengl es2 \
     -eglfs \
-    -no-gtk \
-    -no-gbm \
     -device linux-rasp-pi2-g++ \
-    -device-option CROSS_COMPILE=/usr/bin/
-  #  -dbus-linked \
-  #  -journald \
+    -device-option CROSS_COMPILE=/usr/bin/ \
+    -dbus-linked \
+    -journald
+#    -no-feature-statx \
+#    -no-feature-renameat2 \
 
   make
 }
@@ -112,8 +122,7 @@ package_qt5-base-ropieee() {
   cd ${_pkgfqn}
   make INSTALL_ROOT="${pkgdir}" install
 
-  install -D -m644 LGPL_EXCEPTION.txt \
-    "${pkgdir}"/usr/share/licenses/${pkgbase}/LGPL_EXCEPTION.txt
+  install -D -m644 LICENSE* -t "$pkgdir"/usr/share/licenses/$pkgbase
 
   # Drop QMAKE_PRL_BUILD_DIR because reference the build dir
   find "${pkgdir}/usr/lib" -type f -name '*.prl' \
