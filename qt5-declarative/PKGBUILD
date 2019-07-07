@@ -4,7 +4,7 @@
 
 pkgbase=qt5-declarative
 pkgname=qt5-declarative-ropieee
-_qtver=5.12.3
+_qtver=5.12.4
 pkgver=${_qtver/-/}
 provides=("qt5-declarative=${pkgver}")
 conflicts=('qt5-declarative')
@@ -20,13 +20,13 @@ conflicts=('qtchooser' 'qt5-declarative-render2d' 'qt5-declarative')
 replaces=('qt5-declarative-render2d')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('839881cd6996e35c351bc7d560372ebb91e61f3688957c33248c4f31ea007fa7')
+sha256sums=('614105ed73079d67d81b34fef31c9934c5e751342e4b2e0297128c8c301acda7')
 
 prepare() {
   mkdir -p build
 
   # Use python2 for Python 2.x
-  find -name '*.pro' -o -name '*.pri' | xargs sed -i -e 's|python -c|python2 -c|g' -e 's|python \$|python2 \$|g'
+  #find -name '*.pro' -o -name '*.pri' | xargs sed -i -e 's|python -c|python2 -c|g' -e 's|python \$|python2 \$|g'
 
   #cd ${_pkgfqn}
   #patch -p1 -i ../qtbug-61681.patch # https://bugreports.qt.io/browse/QTBUG-61681

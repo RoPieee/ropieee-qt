@@ -9,7 +9,7 @@
 
 pkgbase=qt5-base
 pkgname=(qt5-base-ropieee qt5-xcb-private-headers-ropieee)
-_qtver=5.12.3
+_qtver=5.12.4
 pkgver=${_qtver/-/}
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
@@ -35,7 +35,7 @@ groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz"
 	"glibc-2.28-NEW.patch")
-sha256sums=('fddfd8852ef7503febeed67b876d1425160869ae2b1ae8e10b3fb0fedc5fe701'
+sha256sums=('20fbc7efa54ff7db9552a7a2cdf9047b80253c1933c834f35b0bc5c1ae021195'
             '77868eb1124a6f524873493573c091eb11366ab0b4f5568a47d30b1ac92b2396')
 
 prepare() {
