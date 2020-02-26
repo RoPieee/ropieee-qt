@@ -4,7 +4,7 @@
 
 pkgbase=qt5-xmlpatterns
 pkgname=qt5-xmlpatterns-ropieee
-_qtver=5.12.4
+_qtver=5.12.6
 pkgver=${_qtver/-/}
 provides=("qt5-xmlpatterns=${pkgver}")
 conflicts=('qt5-xmlpatterns')
@@ -19,7 +19,7 @@ conflicts=('qtchooser' 'qt5-xmlpatterns')
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('0bea1719bb948f65cbed4375cc3e997a6464f35d25b631bafbd7a3161f8f5666')
+sha256sums=('76977bc834e6c6118ae2bab31e68ae54843358936b03e432d919ad15cd2184d0')
 
 prepare() {
   mkdir -p build
