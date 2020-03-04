@@ -9,7 +9,7 @@
 
 pkgbase=qt5-base
 pkgname=(qt5-base-ropieee qt5-xcb-private-headers-ropieee)
-_qtver=5.12.6
+_qtver=5.12.7
 pkgver=${_qtver/-/}
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
@@ -18,14 +18,16 @@ arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
 pkgdesc='A cross-platform application and UI framework'
-depends=('libjpeg-turbo' 'xcb-util-keysyms' 'xcb-util-renderutil' 'libgl' 'fontconfig' 'xdg-utils'
-         'xcb-util-wm' 'libxrender' 'libxi' 'sqlite' 'xcb-util-image' 'icu' 'pcre2'
-         'tslib' 'libinput' 'libsm' 'libxkbcommon-x11' 'libproxy' 'libcups' 'openssl-1.0' 'double-conversion')
-makedepends=('libfbclient' 'libmariadbclient' 'sqlite' 'unixodbc' 'postgresql-libs' 'alsa-lib' 'gst-plugins-base-libs'
-             'gtk3' 'libpulse' 'cups' 'freetds' 'fakeroot')
+depends=('pkgconfig' 'libjpeg-turbo' 'xcb-util-keysyms' 'xcb-util-renderutil' 'fontconfig' 'xdg-utils'
+         'shared-mime-info' 'xcb-util-wm' 'libxrender' 'libxi' 'sqlite' 'xcb-util-image'
+         'tslib' 'libinput' 'libxkbcommon-x11' 'libproxy' 'double-conversion' 'md4c')
+makedepends=('sqlite' 'alsa-lib' 'gst-plugins-base-libs'
+             'libpulse' 'vulkan-headers')
 optdepends=('qt5-svg: to use SVG icon themes'
+            'qt5-wayland: to run Qt applications in a Wayland session'
+            'qt5-translations: for some native UI translations'
             'postgresql-libs: PostgreSQL driver'
-            'libmariadbclient: MariaDB driver'
+            'mariadb-libs: MariaDB driver'
             'unixodbc: ODBC driver'
             'libfbclient: Firebird/iBase driver'
             'freetds: MS SQL driver'
@@ -34,32 +36,33 @@ conflicts=('qtchooser')
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz"
-	"glibc-2.28-NEW.patch")
-sha256sums=('6ab52649d74d7c1728cf4a6cf335d1142b3bf617d476e2857eb7961ef43f9f27'
-            '77868eb1124a6f524873493573c091eb11366ab0b4f5568a47d30b1ac92b2396')
+        'qt5-base-cflags.patch')
+sha256sums=('b18939cb25d90aef8721fb12ec34c3632d3490ced958e41f6c7a52064643665d'
+            '3d6524381b2bbd35c9d85fe6d9f3e39be645e12658a810604dfe981633f78d8b')
 
 prepare() {
   cd ${_pkgfqn}
 
-  # Work around build failure with glibc 2.28
-  #patch -p1 -i ../glibc-2.28-NEW.patch
-
-  # Build qmake using Arch {C,LD}FLAGS
-  # This also sets default {C,CXX,LD}FLAGS for projects built using qmake
-  sed -i -e "s|^\(QMAKE_CFLAGS_RELEASE.*\)|\1 ${CFLAGS}|" \
+# Build qmake using Arch {C,LD}FLAGS
+# This also sets default {C,CXX,LD}FLAGS for projects built using qmake
+sed -i -e "s|^\(QMAKE_CFLAGS_RELEASE.*\)|\1 ${CFLAGS}|" \
     mkspecs/common/gcc-base.conf
-  sed -i -e "s|^\(QMAKE_LFLAGS_RELEASE.*\)|\1 ${LDFLAGS}|" \
+sed -i -e "s|^\(QMAKE_LFLAGS_RELEASE.*\)|\1 ${LDFLAGS}|" \
     mkspecs/common/g++-unix.conf
+
+  #patch -p1 -i ../qt5-base-cflags.patch # Use system CFLAGS
 }
 
 build() {
   cd ${_pkgfqn}
 
+  export PKG_CONFIG_EXECUTABLE=/usr/bin/pkg-config
   export PKG_CONFIG_SYSROOT_DIR=/
   export PKG_CONFIG_LIBDIR=/usr/lib/pkgconfig:/usr/share/pkgconfig:/opt/vc/lib/pkgconfig
 
-  ./configure -confirm-license -opensource -v \
+  ./configure -confirm-license -opensource -v -make libs \
     -force-pkg-config \
+    -release \
     -sysroot / \
     -prefix /usr \
     -docdir /usr/share/doc/qt \
@@ -68,6 +71,7 @@ build() {
     -datadir /usr/share/qt \
     -sysconfdir /etc/xdg \
     -examplesdir /usr/share/doc/qt/examples \
+    -openssl-linked \
     -nomake examples \
     -nomake tests \
     -nomake tools \
@@ -85,10 +89,12 @@ build() {
     -skip qtdatavis3d \
     -skip qtdoc \
     -skip qtgamepad \
+    -optimized-qmake \
     -reduce-exports \
     -system-harfbuzz \
     -system-freetype \
     -fontconfig \
+    -journald \
     -no-use-gold-linker \
     -no-reduce-relocations \
     -no-sse2 \
@@ -103,8 +109,6 @@ build() {
     -eglfs \
     -device linux-rasp-pi2-g++ \
     -device-option CROSS_COMPILE=/usr/bin/
-#    -no-feature-statx \
-#    -no-feature-renameat2 \
 
   make
 }
@@ -137,8 +141,6 @@ package_qt5-base-ropieee() {
 package_qt5-xcb-private-headers-ropieee() {
   pkgdesc='Private headers for Qt5 Xcb'
   depends=("qt5-base-raspberrypi=$pkgver")
-  provides=("qt5-xcb-private-headers=${pkgver}")
-  conflicts=('qt5-xcb-private-headers')
   optdepends=()
   groups=()
   conflicts=()
