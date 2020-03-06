@@ -18,11 +18,10 @@ arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
 pkgdesc='A cross-platform application and UI framework'
-depends=('pkgconfig' 'libjpeg-turbo' 'xcb-util-keysyms' 'xcb-util-renderutil' 'fontconfig' 'xdg-utils'
-         'shared-mime-info' 'xcb-util-wm' 'libxrender' 'libxi' 'sqlite' 'xcb-util-image'
-         'tslib' 'libinput' 'libxkbcommon-x11' 'libproxy' 'double-conversion' 'md4c')
-makedepends=('sqlite' 'alsa-lib' 'gst-plugins-base-libs'
-             'libpulse' 'vulkan-headers')
+depends=('pkgconfig' 'libjpeg-turbo' 'fontconfig'
+         'shared-mime-info' 'sqlite'
+         'tslib' 'libinput' 'libproxy' 'double-conversion')
+makedepends=('sqlite' 'alsa-lib')
 optdepends=('qt5-svg: to use SVG icon themes'
             'qt5-wayland: to run Qt applications in a Wayland session'
             'qt5-translations: for some native UI translations'
