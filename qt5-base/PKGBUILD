@@ -13,13 +13,13 @@ _qtver=5.12.7
 pkgver=${_qtver/-/}
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
-pkgrel=1
+pkgrel=2
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
 pkgdesc='A cross-platform application and UI framework'
 depends=('pkgconfig' 'libjpeg-turbo' 'fontconfig'
-         'shared-mime-info' 'sqlite'
+         'sqlite'
          'tslib' 'libinput' 'libproxy' 'double-conversion')
 makedepends=('sqlite' 'alsa-lib')
 optdepends=('qt5-svg: to use SVG icon themes'
