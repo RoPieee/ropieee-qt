@@ -3,8 +3,8 @@
 # Contributor: Andrea Scarpino <andrea@archlinux.org>
 
 pkgbase=qt5-quickcontrols2
-pkgname=qt5-quickcontrols2-ropieee
-_qtver=5.12.4
+pkgname=qt5-quickcontrols2-ropieee-pi4
+_qtver=5.12.7
 pkgver=${_qtver/-/}
 provides=("qt5-quickcontrols2=${pkgver}")
 conflicts=('qt5-quickcontrols2')
@@ -18,7 +18,7 @@ optdepends=('qt5-graphicaleffects: for the Material style')
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('9a447eed38bc8c7d7be7bc407317f58940377c077ddca74c9a641b1ee6200331')
+sha256sums=('3a9526e5ad01edbfb796a6631983c391ea1b7e22ae6e07840048156a9e92a237')
 
 prepare() {
   mkdir -p build

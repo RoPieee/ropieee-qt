@@ -3,8 +3,8 @@
 # Contributor: Andrea Scarpino 
 
 pkgbase=qt5-mqtt
-pkgname=qt5-mqtt-ropieee
-_qtver=5.12.4
+pkgname=qt5-mqtt-ropieee-pi4
+_qtver=5.12.7
 pkgver=${_qtver/-/}
 provides=("qt5-mqtt=${pkgver}")
 conflicts=('qt5-mqtt')

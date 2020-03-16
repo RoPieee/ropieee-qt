@@ -8,8 +8,8 @@
 #  - use OpenGLES 2.0
 
 pkgbase=qt5-base
-pkgname=(qt5-base-ropieee qt5-xcb-private-headers-ropieee)
-_qtver=5.12.4
+pkgname=(qt5-base-ropieee-pi4 qt5-xcb-private-headers-ropieee-pi4)
+_qtver=5.12.7
 pkgver=${_qtver/-/}
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
@@ -18,11 +18,10 @@ arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
 pkgdesc='A cross-platform application and UI framework'
-depends=('libjpeg-turbo' 'xcb-util-keysyms' 'xcb-util-renderutil' 'libgl' 'fontconfig' 'xdg-utils'
-         'xcb-util-wm' 'libxrender' 'libxi' 'sqlite' 'xcb-util-image' 'icu' 'pcre2'
-         'tslib' 'libinput' 'libsm' 'libxkbcommon-x11' 'libproxy' 'libcups' 'openssl-1.0' 'double-conversion')
-makedepends=('libfbclient' 'libmariadbclient' 'sqlite' 'unixodbc' 'postgresql-libs' 'alsa-lib' 'gst-plugins-base-libs'
-             'gtk3' 'libpulse' 'cups' 'freetds' 'fakeroot')
+depends=('libjpeg-turbo' 'fontconfig' 'mesa' 'libdrm'
+         'sqlite'
+         'tslib' 'libinput' 'libproxy' 'double-conversion')
+makedepends=('pkgconfig' 'sqlite' 'alsa-lib' 'fakeroot')
 optdepends=('qt5-svg: to use SVG icon themes'
             'postgresql-libs: PostgreSQL driver'
             'libmariadbclient: MariaDB driver'
@@ -33,33 +32,34 @@ optdepends=('qt5-svg: to use SVG icon themes'
 conflicts=('qtchooser')
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
-source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz"
-	"glibc-2.28-NEW.patch")
-sha256sums=('20fbc7efa54ff7db9552a7a2cdf9047b80253c1933c834f35b0bc5c1ae021195'
-            '77868eb1124a6f524873493573c091eb11366ab0b4f5568a47d30b1ac92b2396')
+source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
+sha256sums=('b18939cb25d90aef8721fb12ec34c3632d3490ced958e41f6c7a52064643665d')
 
 prepare() {
   cd ${_pkgfqn}
 
-  # Work around build failure with glibc 2.28
-  #patch -p1 -i ../glibc-2.28-NEW.patch
-
-  # Build qmake using Arch {C,LD}FLAGS
-  # This also sets default {C,CXX,LD}FLAGS for projects built using qmake
-  sed -i -e "s|^\(QMAKE_CFLAGS_RELEASE.*\)|\1 ${CFLAGS}|" \
+# Build qmake using Arch {C,LD}FLAGS
+# This also sets default {C,CXX,LD}FLAGS for projects built using qmake
+sed -i -e "s|^\(QMAKE_CFLAGS_RELEASE.*\)|\1 ${CFLAGS}|" \
     mkspecs/common/gcc-base.conf
-  sed -i -e "s|^\(QMAKE_LFLAGS_RELEASE.*\)|\1 ${LDFLAGS}|" \
+sed -i -e "s|^\(QMAKE_LFLAGS_RELEASE.*\)|\1 ${LDFLAGS}|" \
     mkspecs/common/g++-unix.conf
+
+  #patch -p1 -i ../qt5-base-cflags.patch # Use system CFLAGS
 }
 
 build() {
   cd ${_pkgfqn}
 
+  export PKG_CONFIG_EXECUTABLE=/usr/bin/pkg-config
   export PKG_CONFIG_SYSROOT_DIR=/
   export PKG_CONFIG_LIBDIR=/usr/lib/pkgconfig:/usr/share/pkgconfig:/opt/vc/lib/pkgconfig
 
-  ./configure -confirm-license -opensource -v \
+  ./configure -confirm-license -opensource -v -make libs \
+    -device linux-rasp-pi3-vc4-g++ \
+    -device-option CROSS_COMPILE=/usr/bin/ \
     -force-pkg-config \
+    -release \
     -sysroot / \
     -prefix /usr \
     -docdir /usr/share/doc/qt \
@@ -75,7 +75,6 @@ build() {
     -no-rpath \
     -no-pch \
     -no-glib \
-    -no-gbm \
     -no-gtk \
     -no-xcb \
     -skip qt3d \
@@ -86,11 +85,14 @@ build() {
     -skip qtdatavis3d \
     -skip qtdoc \
     -skip qtgamepad \
+    -skip qtwayland \
+    -skip qtwebengine \
     -reduce-exports \
-    -optimized-qmake \
     -system-harfbuzz \
     -system-freetype \
     -fontconfig \
+    -journald \
+    -no-cups \
     -no-use-gold-linker \
     -no-reduce-relocations \
     -no-sse2 \
@@ -102,18 +104,12 @@ build() {
     -no-avx2 \
     -no-feature-getentropy \
     -opengl es2 \
-    -eglfs \
-    -device linux-rasp-pi2-g++ \
-    -device-option CROSS_COMPILE=/usr/bin/ \
-    -dbus-linked \
-    -journald
-#    -no-feature-statx \
-#    -no-feature-renameat2 \
+    -eglfs
 
   make
 }
 
-package_qt5-base-ropieee() {
+package_qt5-base-ropieee-pi4() {
   pkgdesc='A cross-platform application and UI framework'
   provides=("qt5-base=${pkgver}")
   conflicts=('qt5-base')
@@ -138,7 +134,7 @@ package_qt5-base-ropieee() {
   done
 }
 
-package_qt5-xcb-private-headers-ropieee() {
+package_qt5-xcb-private-headers-ropieee-pi4() {
   pkgdesc='Private headers for Qt5 Xcb'
   depends=("qt5-base-raspberrypi=$pkgver")
   provides=("qt5-xcb-private-headers=${pkgver}")

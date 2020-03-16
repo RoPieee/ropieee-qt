@@ -3,8 +3,8 @@
 # Contributor: Andrea Scarpino 
 
 pkgbase=qt5-serialport
-pkgname=qt5-serialport-ropieee
-_qtver=5.12.4
+pkgname=qt5-serialport-ropieee-pi4
+_qtver=5.12.7
 pkgver=${_qtver/-/}
 provides=("qt5-serialport=${pkgver}")
 conflicts=('qt5-serialport')
@@ -18,7 +18,7 @@ makedepends=()
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('bf487df8a9fb2eddf103842b57a75b17ef4c498ee40306ae9997017c82b0ad39')
+sha256sums=('224c282ebed750f46b72dfe18260c3d26fbb74e928dec64bd8c51e7beed8721f')
 
 prepare() {
   mkdir -p build

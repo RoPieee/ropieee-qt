@@ -3,8 +3,8 @@
 # Contributor: Andrea Scarpino <andrea@archlinux.org>
 
 pkgbase=qt5-declarative
-pkgname=qt5-declarative-ropieee
-_qtver=5.12.4
+pkgname=qt5-declarative-ropieee-pi4
+_qtver=5.12.7
 pkgver=${_qtver/-/}
 provides=("qt5-declarative=${pkgver}")
 conflicts=('qt5-declarative')
@@ -20,21 +20,21 @@ conflicts=('qtchooser' 'qt5-declarative-render2d' 'qt5-declarative')
 replaces=('qt5-declarative-render2d')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('614105ed73079d67d81b34fef31c9934c5e751342e4b2e0297128c8c301acda7')
+sha256sums=('5cdc05a035f240ab73b6b37dd3831c1350cd80e5799da47929974085f6eae9bd')
 
 prepare() {
   mkdir -p build
 
   # Use python2 for Python 2.x
-  #find -name '*.pro' -o -name '*.pri' | xargs sed -i -e 's|python -c|python2 -c|g' -e 's|python \$|python2 \$|g'
+  find -name '*.pro' -o -name '*.pri' | xargs sed -i -e 's|python -c|python2 -c|g' -e 's|python \$|python2 \$|g'
 
   #cd ${_pkgfqn}
   #patch -p1 -i ../qtbug-61681.patch # https://bugreports.qt.io/browse/QTBUG-61681
 
   # skip tools and examples
-  cd ${_pkgfqn}
-  mv tools tools.bak4
-  mv examples examples.bak4
+  #cd ${_pkgfqn}
+  #mv tools tools.bak4
+  #mv examples examples.bak4
 }
 
 build() {

@@ -1,7 +1,14 @@
+See here: https://www.tal.org/tutorials/building-qt-512-raspberry-pi
+
+
+
+=== OLD OLD OLD
+
+
 There's an issue with the OpenGL libs, so first you need to 'swap out' the system libraries for the Pi ones.
 
 
-See here:
+See here: https://wiki.qt.io/RaspberryPi2EGLFS
 
 mv /usr/lib/arm-linux-gnueabihf/libEGL.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libEGL.so.1.0.0_backup
 mv /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2.0.0 /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2.0.0_backup
