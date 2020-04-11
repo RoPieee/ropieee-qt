@@ -18,7 +18,7 @@ arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
 pkgdesc='A cross-platform application and UI framework'
-depends=('libjpeg-turbo' 'fontconfig'
+depends=('libjpeg-turbo' 'fontconfig' 'libxkbcommon'
          'sqlite'
          'tslib' 'libinput' 'libproxy' 'double-conversion')
 makedepends=('pkgconfig' 'sqlite' 'alsa-lib' 'fakeroot')
