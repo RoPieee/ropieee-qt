@@ -9,7 +9,7 @@
 
 pkgbase=qt5-base
 pkgname=(qt5-base-ropieee-pi4 qt5-xcb-private-headers-ropieee-pi4)
-_qtver=5.12.7
+_qtver=5.12.8
 pkgver=${_qtver/-/}
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
@@ -33,7 +33,7 @@ conflicts=('qtchooser')
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('b18939cb25d90aef8721fb12ec34c3632d3490ced958e41f6c7a52064643665d')
+sha256sums=('19592fbd0a524a17c35e413988fe494251103619ef7dd49aecdf3170973aabd8')
 
 prepare() {
   cd ${_pkgfqn}
