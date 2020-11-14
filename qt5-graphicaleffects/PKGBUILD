@@ -4,7 +4,7 @@
 
 pkgbase=qt5-graphicaleffects
 pkgname=qt5-graphicaleffects-ropieee-pi4
-_qtver=5.12.8
+_qtver=5.12.10
 pkgver=${_qtver/-/}
 provides=("qt5-graphicaleffects=${pkgver}")
 conflicts=('qt5-graphicaleffects')
@@ -18,7 +18,7 @@ makedepends=()
 groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz")
-sha256sums=('660acc87a084d2e404c2c5ddc0317f0d8a7b5292c889c9f37134e32ed7a33954')
+sha256sums=('7ebad93c00bea3155452b34c2168b498c40ae0ea0c34325aac98e578ca59da42')
 
 prepare() {
   mkdir -p build

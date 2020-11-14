@@ -4,7 +4,7 @@
 
 pkgbase=qt5-mqtt
 pkgname=qt5-mqtt-ropieee-pi4
-_qtver=5.12.8
+_qtver=5.12.10
 pkgver=${_qtver/-/}
 provides=("qt5-mqtt=${pkgver}")
 conflicts=('qt5-mqtt')
