@@ -9,11 +9,11 @@
 
 pkgbase=qt5-base
 pkgname=(qt5-base-ropieee qt5-xcb-private-headers-ropieee)
-_qtver=5.12.7
+_qtver=5.12.10
 pkgver=${_qtver/-/}
 provides=("qt5-base=${pkgver}")
 conflicts=('qt5-base')
-pkgrel=2
+pkgrel=1
 arch=('armv7h')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL3' 'FDL' 'custom')
@@ -36,7 +36,7 @@ groups=('qt' 'qt5')
 _pkgfqn="${pkgbase/5-/}-everywhere-src-${_qtver}"
 source=("http://download.qt.io/official_releases/qt/${pkgver%.*}/${_qtver}/submodules/${_pkgfqn}.tar.xz"
         'qt5-base-cflags.patch')
-sha256sums=('b18939cb25d90aef8721fb12ec34c3632d3490ced958e41f6c7a52064643665d'
+sha256sums=('8088f174e6d28e779516c083b6087b6a9e3c8322b4bc161fd1b54195e3c86940'
             '3d6524381b2bbd35c9d85fe6d9f3e39be645e12658a810604dfe981633f78d8b')
 
 prepare() {
